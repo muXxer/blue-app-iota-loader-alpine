@@ -1,0 +1,71 @@
+#!/sbin/openrc-run
+# Copyright (c) 2018 muXxer
+
+depend()
+{
+	after networking sshd
+}
+
+start()
+{
+	ebegin "Downloading IOTA-Ledger App..."
+	
+	echo ""
+	echo "Please read our documentation carefully at https://github.com/IOTA-Ledger/blue-app-iota/"
+
+	echo ""
+	echo "Downloading latest compiled binary from https://github.com/IOTA-Ledger/blue-app-iota/releases..."
+	echo ""
+	latest_file=`curl -s https://api.github.com/repos/IOTA-Ledger/blue-app-iota/releases | grep browser_download_url | grep app | grep .zip | head -n 1 | cut -d '"' -f 4`
+	mkdir -p /root/iota-ledger/download/
+	cd /root/iota-ledger/download/
+
+	curl -L $latest_file -O
+
+	file_name=`echo $latest_file | rev | cut -d '/' -f 1 | rev`
+	echo ""
+	echo "Downloaded:"
+	echo '   File name = "'${file_name}'"'
+
+	echo ""
+	echo "Unzipping the file and comparing the checksum..."
+	echo ""
+	unzip ${file_name}	
+	sha256sum -c app.hex.sha256
+	retVal=$?
+	if [ $retVal -ne 0 ]; then
+		echo ""
+		echo "Checksum missmatch! Something went wrong! Please try again! Rebooting..."
+		rm -R /root/iota-ledger/download/
+		reboot
+		eend $retVal
+	fi
+	
+	echo ""
+	echo "Plugin your Ledger Nano S now and forward it in VirtualBox! Waiting 10 seconds..."
+	sleep 10
+	echo ""
+
+	python /root/iota-ledger/download_app.py
+	retVal=$?
+	rm -R /root/iota-ledger/download/
+	if [ $retVal -ne 0 ]; then
+		echo ""
+		echo "Something went wrong! Please try again! Rebooting..."
+		sleep 10
+		reboot
+	else
+		echo ""
+		echo "IOTA App installed successfully! Shutting down VM..."
+		sleep 10
+		poweroff
+	fi
+	eend 0
+}
+
+stop()
+{
+	ebegin ""
+	eend 0
+}
+
