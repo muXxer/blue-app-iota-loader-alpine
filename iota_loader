@@ -16,11 +16,30 @@ start()
 	echo ""
 	echo "Downloading latest compiled binary from https://github.com/IOTA-Ledger/blue-app-iota/releases..."
 	echo ""
-	latest_file=`curl -s https://api.github.com/repos/IOTA-Ledger/blue-app-iota/releases | grep browser_download_url | grep app | grep .zip | head -n 1 | cut -d '"' -f 4`
+	
 	mkdir -p /root/iota-ledger/download/
 	cd /root/iota-ledger/download/
+	latest_file=`curl -s https://api.github.com/repos/IOTA-Ledger/blue-app-iota/releases | grep browser_download_url | grep app | grep .zip | head -n 1 | cut -d '"' -f 4`
+	retVal=$?
+	if [ $retVal -ne 0 ]; then
+		echo ""
+		echo "No compiled binary found in the GitHub repository! Do you have a working internet connection? Rebooting..."
+		rm -R /root/iota-ledger/download/
+		sleep 10
+		reboot
+		eend $retVal
+	fi
 
 	curl -L $latest_file -O
+	retVal=$?
+	if [ $retVal -ne 0 ]; then
+		echo ""
+		echo "Downloading the latest compiled binary from GitHub failed! Do you have a working internet connection? Rebooting..."
+		rm -R /root/iota-ledger/download/
+		sleep 10
+		reboot
+		eend $retVal
+	fi
 
 	file_name=`echo $latest_file | rev | cut -d '/' -f 1 | rev`
 	echo ""
@@ -28,25 +47,43 @@ start()
 	echo '   File name = "'${file_name}'"'
 
 	echo ""
-	echo "Unzipping the file and comparing the checksum..."
+	#echo "Unzipping the file and comparing the checksum..."
+	echo "Unzipping the file and verifying the digital signature..."
 	echo ""
-	unzip ${file_name}	
-	sha256sum -c app.hex.sha256
+	unzip ${file_name}
+	echo ""	
+	#sha256sum -c app.hex.sha256
+	gpg --verify app.hex.asc
 	retVal=$?
 	if [ $retVal -ne 0 ]; then
 		echo ""
-		echo "Checksum missmatch! Something went wrong! Please try again! Rebooting..."
+		#echo "Checksum missmatch! Something went wrong! Please try again! Rebooting..."
+		echo "Digital signature not valid! Something went wrong! Please try again! Rebooting..."
 		rm -R /root/iota-ledger/download/
+		sleep 10
 		reboot
 		eend $retVal
 	fi
-	
 	echo ""
-	echo "Plugin your Ledger Nano S now and forward it in VirtualBox! Waiting 10 seconds..."
-	sleep 10
+	echo "File unzipped and digital signature valid!"
+
+	echo ""
+	echo "Plugin your Ledger Nano S now and forward it in VirtualBox! You have 5 minutes to do this."
+	echo "Searching for Ledger Nano S..."
 	echo ""
 
-	python /root/iota-ledger/download_app.py
+	time_ms=0
+	while [ $time_ms -le 300000 ]		
+	do
+		if [ -e /dev/hidraw0 ]; then
+			break
+		fi
+
+		usleep 500000
+		time_ms=$(( $time_ms + 500 ))
+	done
+	
+	python3 /root/iota-ledger/download_app.py
 	retVal=$?
 	rm -R /root/iota-ledger/download/
 	if [ $retVal -ne 0 ]; then
