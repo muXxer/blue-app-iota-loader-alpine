@@ -9,3 +9,4 @@ cp iota_loader /etc/init.d/
 rc-update add iota_loader
 apk del --purge python3-dev gcc git autoconf pkgconf musl-dev libffi-dev automake libtool eudev-dev linux-headers zlib-dev jpeg-dev
 rm -r /root/.cache
+dd if=/dev/zero of=/var/tmp/bigemptyfile bs=4096k ; rm /var/tmp/bigemptyfile
