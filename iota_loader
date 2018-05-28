@@ -75,7 +75,7 @@ start()
 	time_ms=0
 	while [ $time_ms -le 300000 ]		
 	do
-		if [ -e /dev/hidraw0 ]; then
+		if [ -e /dev/hidraw1 ]; then
 			break
 		fi
 
