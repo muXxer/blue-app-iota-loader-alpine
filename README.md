@@ -24,7 +24,7 @@ The application is free and opensource.
 
 ## Download and Installation of the VM
 
-You can download the latest version of the VM here: [Releases](https://github.com/muXxer/blue-app-iota-loader-alpine/releases)
+You can download the latest version of the VM here: [Releases](https://github.com/IOTA-Ledger/blue-app-iota-loader-alpine/releases)
 
 - Open VirtualBox
 - In VirtualBox, click "File" > "Import Appliance"
@@ -39,7 +39,7 @@ You can download the latest version of the VM here: [Releases](https://github.co
 - Now select the new VM in the list on the left
 - Click "Start"
 - In VirtualBox, click the little USB icon on the bottom right and select the Ledger from the menu. This allows the VM to access the Ledger.<br>
-![USB Settings](https://github.com/muXxer/blue-app-iota-loader-alpine/blob/master/resources/vbox_usb.png)
+![USB Settings](resources/vbox_usb.png)
 - Wait until the VM starts downloading the app
 
 During installation you are asked to insert your pin and asked to install an unofficial Ledger-application. Enter your pin and accept the warning by Ledger (the reasons for this warning is because our application is not released on the Ledger-store yet).
