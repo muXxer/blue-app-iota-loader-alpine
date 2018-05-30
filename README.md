@@ -22,13 +22,13 @@ The application is free and opensource.
 - Download VirtualBox here: https://www.virtualbox.org
 - Now install it according to the steps given for your OS.
 
-## Download and Installation of the VM
+## Download the IOTA VM Installer Image
 
-You can download the latest version of the VM here: [Releases](https://github.com/IOTA-Ledger/blue-app-iota-loader-alpine/releases)
+You can download the latest version of the IOTA VM Installer Image here: [Releases](https://github.com/IOTA-Ledger/blue-app-iota-loader-alpine/releases) (Download IOTA-Ledger-App-Loader.ova)
 
 - Open VirtualBox
 - In VirtualBox, click "File" > "Import Appliance"
-- Browse to the file you just downloaded
+- Browse to IOTA-Ledger-App-Loader.ova
 - Click "Next"
 - Click "Import"
    
