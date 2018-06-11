@@ -1,6 +1,18 @@
 #!/sbin/openrc-run
 # Copyright (c) 2018 muXxer
 
+## Functions
+_bold=$(tput bold)
+_reset=$(tput sgr0)
+
+_red=$(tput setaf 1)
+_green=$(tput setaf 2)
+_yellow=$(tput setaf 3)
+
+function print_ok   { printf "${_bold}${_green}%s${_reset}\n" "$@"; }
+function print_err  { printf "${_bold}${_red}%s${_reset}\n" "$@"; }
+function print_warn { printf "${_bold}${_yellow}%s${_reset}\n" "$@"; }
+
 depend()
 {
 	after networking sshd
@@ -11,10 +23,10 @@ start()
 	ebegin "Downloading IOTA-Ledger App..."
 	
 	echo ""
-	echo "Please read our documentation carefully at https://github.com/IOTA-Ledger/blue-app-iota/"
+	print_warn "Please read our documentation carefully at https://github.com/IOTA-Ledger/blue-app-iota/"
 
 	echo ""
-	echo "Downloading latest compiled binary from https://github.com/IOTA-Ledger/blue-app-iota/releases..."
+	print_ok "Downloading latest compiled binary from https://github.com/IOTA-Ledger/blue-app-iota/releases..."
 	echo ""
 	
 	mkdir -p /root/iota-ledger/download/
@@ -23,7 +35,7 @@ start()
 	retVal=$?
 	if [ $retVal -ne 0 ]; then
 		echo ""
-		echo "No compiled binary found in the GitHub repository! Do you have a working internet connection? Rebooting..."
+		print_err "No compiled binary found in the GitHub repository! Do you have a working internet connection? Rebooting..."
 		rm -R /root/iota-ledger/download/
 		sleep 10
 		reboot
@@ -34,7 +46,7 @@ start()
 	retVal=$?
 	if [ $retVal -ne 0 ]; then
 		echo ""
-		echo "Downloading the latest compiled binary from GitHub failed! Do you have a working internet connection? Rebooting..."
+		print_err "Downloading the latest compiled binary from GitHub failed! Do you have a working internet connection? Rebooting..."
 		rm -R /root/iota-ledger/download/
 		sleep 10
 		reboot
@@ -43,12 +55,12 @@ start()
 
 	file_name=`echo $latest_file | rev | cut -d '/' -f 1 | rev`
 	echo ""
-	echo "Downloaded:"
-	echo '   File name = "'${file_name}'"'
+	print_ok "Downloaded:"
+	print_ok '   File name = "'${file_name}'"'
 
 	echo ""
 	#echo "Unzipping the file and comparing the checksum..."
-	echo "Unzipping the file and verifying the digital signature..."
+	print_ok "Unzipping the file and verifying the digital signature..."
 	echo ""
 	unzip ${file_name}
 	echo ""	
@@ -58,18 +70,18 @@ start()
 	if [ $retVal -ne 0 ]; then
 		echo ""
 		#echo "Checksum missmatch! Something went wrong! Please try again! Rebooting..."
-		echo "Digital signature not valid! Something went wrong! Please try again! Rebooting..."
+		print_err "Digital signature not valid! Something went wrong! Please try again! Rebooting..."
 		rm -R /root/iota-ledger/download/
 		sleep 10
 		reboot
 		eend $retVal
 	fi
 	echo ""
-	echo "File unzipped and digital signature valid!"
+	print_ok "File unzipped and digital signature valid!"
 
 	echo ""
-	echo "Plugin your Ledger Nano S now and forward it in VirtualBox! You have 5 minutes to do this."
-	echo "Searching for Ledger Nano S..."
+	print_warn "Plugin your Ledger Nano S now and forward it in VirtualBox! You have 5 minutes to do this."
+	print_warn "Searching for Ledger Nano S..."
 	echo ""
 
 	time_ms=0
@@ -88,13 +100,19 @@ start()
 	rm -R /root/iota-ledger/download/
 	if [ $retVal -ne 0 ]; then
 		echo ""
-		echo "Something went wrong! Please try again! Rebooting..."
-		sleep 10
-		reboot
+		if [ $retVal -eq 2 ]; then
+			print_err "Ledger Nano S Firmware is too old! Please update your Ledger Nano S Firmware and try again! Shutting down VM..."
+			sleep 5
+			poweroff
+		else
+			print_err "Something went wrong! Please try again! Rebooting..."
+			sleep 5
+			reboot
+		fi
 	else
 		echo ""
-		echo "IOTA App installed successfully! Shutting down VM..."
-		sleep 10
+		print_ok "IOTA App installed successfully! Shutting down VM..."
+		sleep 3
 		poweroff
 	fi
 	eend 0
