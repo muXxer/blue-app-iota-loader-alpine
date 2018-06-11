@@ -95,7 +95,8 @@ start()
 		time_ms=$(( $time_ms + 500 ))
 	done
 	
-	python3 /root/iota-ledger/download_app.py
+	cd /root/iota-ledger/
+	python3 download_app.py
 	retVal=$?
 	rm -R /root/iota-ledger/download/
 	if [ $retVal -ne 0 ]; then

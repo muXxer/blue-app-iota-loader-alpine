@@ -83,7 +83,7 @@ if __name__ == '__main__':
 		
 		if version_os_act < args.minVersionOS:
 			print("ERROR: Ledger OS version too old! version_os_act: 0x%08X, minVersionOS: 0x%08X" % (version_os_act, args.minVersionOS))
-			sys.exit(-1)
+			sys.exit(1)
 	
 	if args.minVersionMCU != None:
 		version_mcu_act = 0x00000000
@@ -99,4 +99,4 @@ if __name__ == '__main__':
 		
 		if version_mcu_act < args.minVersionMCU:
 			print("ERROR: Ledger MCU version too old! version_mcu_act: 0x%08X, minVersionMCU: 0x%08X" % (version_mcu_act, args.minVersionMCU))
-			sys.exit(-2)
+			sys.exit(2)
