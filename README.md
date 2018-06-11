@@ -8,6 +8,10 @@ See [Ledger's documentation](http://ledger.readthedocs.io) to get more info abou
 
 While we've made it as easy as possible to install the IOTA application, it still requests some technical know-how, so be patient and read along!
 
+## IMPORTANT!
+
+Before getting started, please be sure you've [read the warnings](https://github.com/IOTA-Ledger/blue-app-iota/blob/master/README.md#iota-security-concerns-on-ledger-nano-s)
+
 ## Requirements
 
 Make sure that your Ledger Nano S is running firmware 1.4.2.<br>
