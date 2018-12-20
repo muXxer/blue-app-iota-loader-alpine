@@ -31,7 +31,7 @@ start()
 	
 	mkdir -p /root/iota-ledger/download/
 	cd /root/iota-ledger/download/
-	latest_file=`curl -s https://api.github.com/repos/IOTA-Ledger/blue-app-iota/releases | grep browser_download_url | grep nanos-app | grep .zip | head -n 1 | cut -d '"' -f 4`
+	latest_file=`curl -s https://api.github.com/repos/IOTA-Ledger/blue-app-iota/releases | grep browser_download_url | grep blue-app | grep .zip | head -n 1 | cut -d '"' -f 4`
 	retVal=$?
 	if [ $retVal -ne 0 ]; then
 		echo ""
@@ -80,8 +80,8 @@ start()
 	print_ok "File unzipped and digital signature valid!"
 
 	echo ""
-	print_warn "Plugin your Ledger Nano S now and forward it in VirtualBox! You have 5 minutes to do this."
-	print_warn "Searching for Ledger Nano S..."
+	print_warn "Plugin your Ledger Blue now and forward it in VirtualBox! You have 5 minutes to do this."
+	print_warn "Searching for Ledger Blue..."
 	echo ""
 
 	time_ms=0
@@ -96,13 +96,13 @@ start()
 	done
 	
 	cd /root/iota-ledger/
-	python3 download_app.py
+	python3 download_app_blue.py
 	retVal=$?
 	rm -R /root/iota-ledger/download/
 	if [ $retVal -ne 0 ]; then
 		echo ""
 		if [ $retVal -eq 2 ]; then
-			print_err "Ledger Nano S Firmware is too old! Please update your Ledger Nano S Firmware and try again! Shutting down VM..."
+			print_err "Ledger Blue Firmware is too old! Please update your Ledger Blue Firmware and try again! Shutting down VM..."
 			sleep 5
 			poweroff
 		else
