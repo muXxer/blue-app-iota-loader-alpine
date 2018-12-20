@@ -1,6 +1,6 @@
 # Intro
 
-You're about to install the IOTA beta app on the Ledger Nano S using our beta installer.
+You're about to install the IOTA beta app on the Ledger Nano S / Ledger Blue using our beta installer.
 
 See [blue-app-iota GitHub repository](https://github.com/IOTA-Ledger/blue-app-iota) for the original source code.
 
@@ -15,6 +15,7 @@ Before getting started, please be sure you've [read the warnings](https://github
 ## Requirements
 
 Make sure that your Ledger Nano S is running firmware 1.4.2.<br>
+Make sure that your Ledger Blue is running firmware 2.1.1.<br>
 For update instructions see: [How to update my Ledger Nano S with the firmware 1.4](https://support.ledgerwallet.com/hc/en-us/articles/360001340473-How-to-update-my-Ledger-Nano-S-with-the-firmware-1-4)
 
 ## Installation of VirtualBox
@@ -32,13 +33,13 @@ You can download the latest version of the IOTA VM Installer Image here: [Releas
 
 - Open VirtualBox
 - In VirtualBox, click "File" > "Import Appliance"
-- Browse to IOTA-Ledger-App-Loader.ova
+- Browse to "IOTA-Ledger-Nano-App-Loader.ova" or "IOTA-Ledger-Blue-App-Loader.ova"
 - Click "Next"
 - Click "Import"
    
-## Installation on the Ledger Nano S
+## Installation on the Ledger
 
-- Plug in your Ledger Nano S and enter your pin (you can leave it at the dashboard)
+- Plug in your Ledger device and enter your pin (you can leave it at the dashboard)
 - Open VirtualBox
 - Now select the new VM in the list on the left
 - Click "Start"
@@ -54,7 +55,7 @@ After the installation is done, you should see your IOTA app on the dashboard!
 
 If it worked! Otherwise, feel free to head to issues and ask for help.
 
-You can now continue to use the Ledger Nano S with a supported wallet app.
+You can now continue to use the Ledger Nano S / Ledger Blue with a supported wallet app.
 
 ## Contributing
 
